@@ -1,0 +1,55 @@
+// change footer color
+.page-footer {
+  background-color: black;
+}
+
+// Override featurette icon text color
+.featurette-icon,
+.dark .featurette .section-subheading {
+  color: black;
+}
+
+// Center sponsor logos
+#sponsors figure {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.powered-by {
+  visibility: hidden;
+}
+
+.copyright-license-text {
+  visibility: visible!important;
+}
+
+#countdown {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  font-size: 14px;
+  color: black;
+  background-color:grey;
+}
+
+#countdown > div {
+  display: inline-block;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #f2f2f2;
+  margin-right: 10px;
+}
+
+#countdown div > span {
+  display: block;
+  font-size: 24px;
+  font-weight: 100;
+}
+
+.smalltext {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 75;
+  color: black;
+}

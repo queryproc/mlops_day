@@ -1,0 +1,1052 @@
+<!DOCTYPE html><html lang="en-us" >
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.5.0 for Hugo" />
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Heng Li" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Developers insert monitoring probes (i.e., logging statements) in their source code to monitor the runtime behaviors of software systems. Logging statements print runtime log messages which play a critical role in various operation and maintenance efforts (e.g., anomaly detection or failure diagnosis). However, developers typically insert logging statements in an ad hoc manner, often resulting in fragile logging code, i.e., insufficient logging in some code snippets and excessive logging in other code snippets. Insufficient logging can significantly increase the difficulty of field failure diagnosis, while excessive logging can cause performance overhead and hide truly important information. To understand and support software logging practices, we surveyed software developers and analyzed software repositories (source code, change history, and issue reports) to understand the benefits and costs of logging, where developers distribute their logging code, how they choose the verbosity level and content for their logging code, how they maintain their logging code, and the consistency between logging and other code, and proposed automated approaches to support developers&#39; logging practices (e.g.,  auto-generation of logging code). In this talk, I will discuss lessons learned from traditional software monitoring, how they apply to machine learning applications, and the particular considerations for the monitoring of machine learning applications." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://localhost:1313/event/heng-li/" />
+
+  
+  
+  
+    <meta name="theme-color" content="DodgerBlue" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.c7b8d9abd591ba2253ea42747e3ac3f5.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/libs/chroma/github-light.min.css" title="hl-light" media="print" onload="this.media='all'" disabled>
+    <link rel="stylesheet" href="/css/libs/chroma/dracula.min.css" title="hl-dark" media="print" onload="this.media='all'" >
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.3c9dcec6ab0db71735f5ac15f406ebb5.css" />
+
+  
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hu2be58cdd2ec048fc92d683e8561c49bc_2631_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu2be58cdd2ec048fc92d683e8561c49bc_2631_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://localhost:1313/event/heng-li/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+    <meta property="twitter:site" content="@semla_sym" />
+    <meta property="twitter:creator" content="@semla_sym" />
+  
+  <meta property="og:site_name" content="MLOps Day" />
+  <meta property="og:url" content="http://localhost:1313/event/heng-li/" />
+  <meta property="og:title" content="Monitoring Machine Learning Applications: Lessons Learned from Monitoring Traditional Software and Beyond | MLOps Day" />
+  <meta property="og:description" content="Developers insert monitoring probes (i.e., logging statements) in their source code to monitor the runtime behaviors of software systems. Logging statements print runtime log messages which play a critical role in various operation and maintenance efforts (e.g., anomaly detection or failure diagnosis). However, developers typically insert logging statements in an ad hoc manner, often resulting in fragile logging code, i.e., insufficient logging in some code snippets and excessive logging in other code snippets. Insufficient logging can significantly increase the difficulty of field failure diagnosis, while excessive logging can cause performance overhead and hide truly important information. To understand and support software logging practices, we surveyed software developers and analyzed software repositories (source code, change history, and issue reports) to understand the benefits and costs of logging, where developers distribute their logging code, how they choose the verbosity level and content for their logging code, how they maintain their logging code, and the consistency between logging and other code, and proposed automated approaches to support developers&#39; logging practices (e.g.,  auto-generation of logging code). In this talk, I will discuss lessons learned from traditional software monitoring, how they apply to machine learning applications, and the particular considerations for the monitoring of machine learning applications." /><meta property="og:image" content="http://localhost:1313/media/icon_hu2be58cdd2ec048fc92d683e8561c49bc_2631_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://localhost:1313/media/icon_hu2be58cdd2ec048fc92d683e8561c49bc_2631_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2017-01-01T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2023-04-27T10:30:00&#43;00:00">
+  
+
+  
+
+
+
+  
+    
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/event/heng-li/"
+  },
+  "name": "Monitoring Machine Learning Applications: Lessons Learned from Monitoring Traditional Software and Beyond",
+  
+  "location": {
+    "@type": "Place",
+    "name": "Polytechnique Montreal",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2500 Chem. de Polytechnique",
+      "addressLocality": "Montréal",
+      "postalCode": "H3T 1J4",
+      "addressRegion": "QC",
+      "addressCountry": "Canada"
+    }
+    
+  },
+  
+  
+  "startDate": "2023-04-27T10:30:00Z",
+  
+  "endDate": "2023-04-27T11:00:00Z",
+  
+  
+  "performer": {
+    "@type": "Person",
+    "name": "Heng Li"
+  },
+  
+  "description": "Developers insert monitoring probes (i.e., logging statements) in their source code to monitor the runtime behaviors of software systems. Logging statements print runtime log messages which play a critical role in various operation and maintenance efforts (e.g., anomaly detection or failure diagnosis). However, developers typically insert logging statements in an ad hoc manner, often resulting in fragile logging code, i.e., insufficient logging in some code snippets and excessive logging in other code snippets. Insufficient logging can significantly increase the difficulty of field failure diagnosis, while excessive logging can cause performance overhead and hide truly important information. To understand and support software logging practices, we surveyed software developers and analyzed software repositories (source code, change history, and issue reports) to understand the benefits and costs of logging, where developers distribute their logging code, how they choose the verbosity level and content for their logging code, how they maintain their logging code, and the consistency between logging and other code, and proposed automated approaches to support developers' logging practices (e.g.,  auto-generation of logging code). In this talk, I will discuss lessons learned from traditional software monitoring, how they apply to machine learning applications, and the particular considerations for the monitoring of machine learning applications."
+}
+</script>
+
+  
+
+  
+
+  
+<link rel="preload" href="/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+
+  <title>Monitoring Machine Learning Applications: Lessons Learned from Monitoring Traditional Software and Beyond | MLOps Day</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="7cd94177a89ced7f5734fe16152093cc" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.6a6813e7ed475370e052267c3a688edc.js"></script>
+
+  
+
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">MLOps Day</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">MLOps Day</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-end" id="navbar-content">
+
+        
+        <ul class="navbar-nav d-md-inline-flex">
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#about"><span>MLOps Day</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#speakers"><span>Speakers</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#schedule"><span>Schedule</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#location"><span>Location</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+
+      </ul>
+
+    </div>
+  </nav>
+</header>
+
+
+  </div>
+
+  <div class="page-body">
+    
+    
+    
+
+    <div class="pub">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Monitoring Machine Learning Applications: Lessons Learned from Monitoring Traditional Software and Beyond</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    
+      <h3>Abstract</h3>
+      <p class="pub-abstract">Developers insert monitoring probes (i.e., logging statements) in their source code to monitor the runtime behaviors of software systems. Logging statements print runtime log messages which play a critical role in various operation and maintenance efforts (e.g., anomaly detection or failure diagnosis). However, developers typically insert logging statements in an ad hoc manner, often resulting in fragile logging code, i.e., insufficient logging in some code snippets and excessive logging in other code snippets. Insufficient logging can significantly increase the difficulty of field failure diagnosis, while excessive logging can cause performance overhead and hide truly important information. To understand and support software logging practices, we surveyed software developers and analyzed software repositories (source code, change history, and issue reports) to understand the benefits and costs of logging, where developers distribute their logging code, how they choose the verbosity level and content for their logging code, how they maintain their logging code, and the consistency between logging and other code, and proposed automated approaches to support developers&rsquo; logging practices (e.g.,  auto-generation of logging code). In this talk, I will discuss lessons learned from traditional software monitoring, how they apply to machine learning applications, and the particular considerations for the monitoring of machine learning applications.</p>
+    
+
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-12 col-md-3 pub-row-heading">Date</div>
+          <div class="col-12 col-md-9">
+            Apr 27, 2023 10:30 AM &mdash; 11:00 AM
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+    <div class="d-md-none space-below"></div>
+
+    
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-12 col-md-3 pub-row-heading">Event</div>
+          <div class="col-12 col-md-9">
+            <a href="http://localhost:1313/" target="_blank" rel="noopener">
+            SEMLA MLOps Day
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+    <div class="d-md-none space-below"></div>
+    
+
+    
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-12 col-md-3 pub-row-heading">Location</div>
+          <div class="col-12 col-md-9">Polytechnique Montreal</div>
+          
+            <div class="col-md-3"></div>
+            <div class="col-12 col-md-9">2500 Chem. de Polytechnique, Montréal, QC H3T 1J4</div>
+          
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+    <div class="d-md-none space-below"></div>
+    
+
+    <div class="space-below"></div>
+
+    <div class="article-style">
+      
+    </div>
+
+    
+
+
+
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://localhost:1313/event/heng-li/&amp;text=Monitoring%20Machine%20Learning%20Applications:%20Lessons%20Learned%20from%20Monitoring%20Traditional%20Software%20and%20Beyond" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://localhost:1313/event/heng-li/&amp;t=Monitoring%20Machine%20Learning%20Applications:%20Lessons%20Learned%20from%20Monitoring%20Traditional%20Software%20and%20Beyond" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Monitoring%20Machine%20Learning%20Applications:%20Lessons%20Learned%20from%20Monitoring%20Traditional%20Software%20and%20Beyond&amp;body=http://localhost:1313/event/heng-li/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://localhost:1313/event/heng-li/&amp;title=Monitoring%20Machine%20Learning%20Applications:%20Lessons%20Learned%20from%20Monitoring%20Traditional%20Software%20and%20Beyond" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Monitoring%20Machine%20Learning%20Applications:%20Lessons%20Learned%20from%20Monitoring%20Traditional%20Software%20and%20Beyond%20http://localhost:1313/event/heng-li/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://localhost:1313/event/heng-li/&amp;title=Monitoring%20Machine%20Learning%20Applications:%20Lessons%20Learned%20from%20Monitoring%20Traditional%20Software%20and%20Beyond" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="/authors/heng-li/avatar_hu943156166bd40abf275eeef9268648ba_171182_270x270_fill_q75_lanczos_center.jpg" alt="Heng Li">
+    
+
+    <div class="media-body">
+      <h5 class="card-title">Heng Li</h5>
+      <h6 class="card-subtitle">Assistant Professor of Software Engineering - Polytechnique Montreal</h6>
+      <p class="card-text">Heng Li is an assistant professor in the Department of Computer and Software Engineering at Polytechnique Montreal, where he leads the MOOSE lab. He holds a PhD in Computing from Queen’s University. Prior to his academic career, he worked in the industry for years as a software engineer at Synopsys and as a software performance engineer at BlackBerry. His and his students&rsquo; research aims to address the practical challenges in software monitoring, software quality engineering, intelligent operations of software systems, and quality engineering of machine learning applications. The outcomes of such research have benefited the daily maintenance and operations of software and software-intensive systems in the industry and inspired follow-up research in related areas. He is a core organizer of the international Software Engineering for Machine Learning Applications (SEMLA) symposium. He is a recipient of the Discovery Grant from NSERC, John R. Evans Leaders Fund from CFI, and NSERC Alliance, among other grants. He is the secretary of the Standard Performance Evaluation Corporation (SPEC) Research Group – DevOps Performance Working Group.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://ca.linkedin.com/in/heng-li-9b91611b" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.hengli.org/" target="_blank" rel="noopener">
+        <i class="fa fa-link"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</div>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+
+
+
+
+  
+  <p class="powered-by copyright-license-text">
+    Copyright © 2023 H.B.B
+  </p>
+  
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.d26509351aa0ff874abbee824e982e9b.js"></script>
+
+    
+    
+    
+      
+
+      
+      
+
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+
+    
+
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.c251366b4128fd5e6b046d4c97a62a51.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="/en/js/wowchemy.min.4590d6ec2ed15f488ffc389c679f69fa.js"></script>
+
+    
+    
+      <script src="/js/wowchemy-map.a26e9d2f7238ba5b868384f1c5bc6477.js" type="module"></script>
+    
+    
+    
+    
+
+
+
+
+
+
+</body>
+</html>

@@ -19,14 +19,12 @@ design:
   columns: '1'
   css_class: fullscreen
 ---
-
-The event will cover four topics, starting with a discussion on the challenges faced by data scientists in the field, followed by an exploration of MLOps practices derived from software engineering principles, adapted to evolving ML tools stack, and advocated by MLOps engineers across all companies dealing with data and ML models. 
+The event will cover a variety of topics related to training, deploying, and using LLMs as part of building applications. We will focus on the challenges faced by application developers and data scientists. We will delve into the specific of use cases and the current and future infrastructure needs.
 {style="padding-top: 5rem"}
-Next, we will step back and try to grasp the concepts involved in those emerging practices. What concepts are rebranded from other mature fields? How do researchers drive novelty in this field? What brand new concepts will be born as a result? 
+As we have done in our prior edition, we will step back and try to grasp the concepts involved in the emerging practices. What challenges are seen as an old problem within a new context? What makes prior solutions not work? What brand new concepts and techniques will be born as a result?
 
-Last but not least, we will hear from a leader in the responsible AI movement about recent developments in technology provided to ML practitioners to ensure ethical and responsible use of AI. We will also open the floor for discussion on potential risks and benefits associated with large language models like ChatGPT and LLMOps practices that need to be developed.
+Last but not least, we will hold a panel discussing the future of LLM models in enterprise applications. Our goal is to understand future trends, e.g., small specialized models vs. large more general models, need for fine-turning, how to building trust and reliability in solutions.
 
-Don't miss out on this exciting event! Register now to join us for a day of informative talks and engaging discussions on MLOps.
+Don’t miss out on this exciting event! Register now to join us for a day of informative talks and engaging discussions.
 
 Stay tuned!
-
